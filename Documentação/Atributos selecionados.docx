@@ -1,0 +1,51 @@
+Atributos para Cadastro de Usuário Doador:
+
+1- Nome completo – Nome completo do doador.
+
+2- E-mail – Utilizado para login e comunicação com a plataforma.
+
+3- Senha – Definida pelo usuário e armazenada de forma criptografada.
+
+4- Telefone – Número de contato, opcional, pode ser usado para autenticação em dois fatores.
+
+5- CPF – Opcional, pode ser solicitado para emissão de recibos fiscais.
+
+6- Data de nascimento – Opcional, pode ser utilizada para personalização do conteúdo.
+
+7- Foto de perfil – Opcional, imagem do usuário para identificação visual.
+
+8- Método de pagamento – Informações como cartão de crédito, PIX ou boleto (armazenadas de forma segura).
+
+9- Data de cadastro – Data em que o usuário foi registrado na plataforma.
+
+
+
+Atributos para Cadastro de ONG:
+
+1- Nome da ONG – Nome oficial da organização.
+
+2- E-mail – Utilizado para login e comunicação institucional.
+
+3- Senha – Criada no momento do cadastro e armazenada com segurança.
+
+4- Telefone – Número para contato com a ONG.
+
+5- CNPJ – Cadastro Nacional de Pessoa Jurídica, usado para verificar a legalidade da ONG.
+
+6- Endereço – Localização física da ONG (pode incluir rua, número, cidade, estado, etc.).
+
+7- Descrição da ONG – Texto que descreve a missão, os objetivos e a área de atuação da ONG.
+
+8- Categorias de atuação – Áreas em que a ONG atua, como meio ambiente, educação, saúde, proteção animal, entre outras.
+
+9- Site oficial – Opcional, link para o site da ONG.
+
+10- Conta bancária – Informações necessárias para que a ONG possa receber as doações.
+
+11- Logo da ONG – Imagem usada para identificação visual na plataforma.
+
+12- Documentos de verificação – Arquivos como estatuto social, certidões, entre outros documentos exigidos para validação.
+
+13- Status de verificação – Indica se a ONG está verificada ou se ainda está em análise.
+
+14- Data de cadastro – Momento em que a ONG foi registrada na plataforma.
