@@ -26,22 +26,43 @@ class _MainNavigationState extends State<MainNavigation> {
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.volunteer_activism),
-            label: '',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
-        ],
-        selectedItemColor: Colors.black,
+        backgroundColor: Colors.lightBlue.shade200,
+        selectedItemColor: Colors.lightBlue,
         unselectedItemColor: Colors.black54,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: Colors.white,
         elevation: 5,
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: '',
+            activeIcon: Icon(
+              Icons.home,
+              size: 30,
+              semanticLabel: 'Home', // Acessibilidade
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism),
+            label: '',
+            activeIcon: Icon(
+              Icons.volunteer_activism,
+              size: 30,
+              semanticLabel: 'Doar', // Acessibilidade
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: '',
+            activeIcon: Icon(
+              Icons.search,
+              size: 30,
+              semanticLabel: 'Buscar', // Acessibilidade
+            ),
+          ),
+        ],
       ),
     );
   }
