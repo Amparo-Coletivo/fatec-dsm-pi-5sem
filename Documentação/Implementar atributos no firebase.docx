@@ -1,0 +1,11 @@
+1. Criar um projeto no Firebase
+
+Acesse o console do Firebase.
+
+Clique em Adicionar projeto, e siga os passos.
+
+Após criar, vá em Adicionar app (ícone do Flutter/Android/iOS).
+
+Copie o nome do pacote (applicationId) do seu android/app/build.gradle e cole no Firebase.
+
+Baixe o google-services.json e coloque em android/app/.
