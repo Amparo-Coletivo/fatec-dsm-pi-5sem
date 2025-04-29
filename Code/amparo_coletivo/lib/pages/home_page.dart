@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mural das ONG’s'),
+        title: const Text("Mural das ONG's"),
         backgroundColor: Colors.lightBlue,
         leading: Builder(
           builder: (context) => IconButton(
@@ -54,17 +54,17 @@ class _HomePageState extends State<HomePage> {
         enableSwitchAnimation: true,
         child: ListView(
           children: [
-            ongCarousel("ONG’s para arrecadação de roupas:", [
+            ongCarousel("ONG's para arrecadação de roupas:", [
               ongItem(imagePath: 'assets/images/ong1.png'),
               ongItem(),
               ongItem(),
             ]),
-            ongCarousel("ONG’s para alimentos não perecíveis:", [
+            ongCarousel("ONG's para alimentos não perecíveis:", [
               ongItem(),
               ongItem(),
               ongItem(),
             ]),
-            ongCarousel("ONG’s favoritas:", [
+            ongCarousel("ONG's favoritas:", [
               ongItem(),
               ongItem(),
               ongItem(),
