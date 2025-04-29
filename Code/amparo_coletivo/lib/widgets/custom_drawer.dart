@@ -1,80 +1,147 @@
 import 'package:flutter/material.dart';
+import 'package:amparo_coletivo/pages/register_page.dart';
 
 class CustomDrawer extends StatelessWidget {
-  final VoidCallback onLogout;
-
-  const CustomDrawer({Key? key, required this.onLogout}) : super(key: key);
+  final Function? onLogout;
+  
+  const CustomDrawer({Key? key, this.onLogout}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark ? Colors.grey[900] : Colors.lightBlue;
-    final headerColor = isDark ? Colors.grey[850] : Colors.blue[700];
-    final textColor = Colors.white;
-
     return Drawer(
       child: Container(
-        color: backgroundColor,
+        color: Colors.blue,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: headerColor,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(16.0),
+              child: const Row(
                 children: [
-                  Text(
-                    "Mural das ONG's",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 16,
-                    ),
+                  Icon(
+                    Icons.list,
+                    color: Colors.white,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(width: 16.0),
                   Text(
-                    'Olá, registre-se para continuar',
+                    'Mural das ONGs',
                     style: TextStyle(
-                      color: textColor,
-                      fontSize: 20,
-                      fontStyle: FontStyle.italic,
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
             ),
-            Divider(color: textColor, height: 1),
-            buildDrawerItem(Icons.home_outlined, 'Home', () {}, textColor, showDivider: true),
-            buildDrawerItem(Icons.login, 'Login', () {}, textColor, showDivider: true),
-            buildDrawerItem(Icons.app_registration, 'Registro', () {}, textColor, showDivider: true),
-            buildDrawerItem(Icons.support_agent_outlined, 'Suporte', () {}, textColor, showDivider: false),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                'Olá, registre-se para continuar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            const Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Home',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigate to home page if not already there
+              },
+            ),
+            const Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.login,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Login',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigate to login page
+              },
+            ),
+            const Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.app_registration,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Registro',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer first
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RegisterPage()),
+                );
+              },
+            ),
+            const Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.support_agent,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Suporte',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigate to support page
+              },
+            ),
+            if (onLogout != null) ...[
+              const Spacer(),
+              const Divider(
+                color: Colors.white24,
+                height: 1,
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  onLogout!();
+                },
+              ),
+            ],
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildDrawerItem(
-    IconData icon,
-    String title,
-    VoidCallback onTap,
-    Color textColor, {
-    bool showDivider = false,
-  }) {
-    return Column(
-      children: [
-        ListTile(
-          leading: Icon(icon, color: textColor),
-          title: Text(title, style: TextStyle(color: textColor)),
-          onTap: onTap,
-        ),
-        if (showDivider)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Divider(color: textColor),
-          ),
-      ],
     );
   }
 }
