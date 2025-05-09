@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:amparo_coletivo/widgets/custom_drawer.dart'; 
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,44 +19,57 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadData() async {
-    await Future.delayed(const Duration(seconds: 3)); // Simula carregamento
+    await Future.delayed(const Duration(seconds: 3));
     setState(() {
       _loading = false;
     });
+  }
+
+  void _handleLogout() {
+    // Lógica de logout aqui
+    Navigator.of(context).pop(); // Fecha o drawer
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Logout efetuado')),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mural das ONG’s'),
+        title: const Text("Mural das ONG's"),
         backgroundColor: Colors.lightBlue,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            // Pode abrir um drawer no futuro
-          },
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
         ),
       ),
+      drawer: CustomDrawer(onLogout: _handleLogout),
       body: Skeletonizer(
         enabled: _loading,
         enableSwitchAnimation: true,
         child: ListView(
           children: [
-            ongCarousel("ONG’s para arrecadação de roupas:", [
-              ongItem(
-                imagePath: 'assets/images/ong1.png',
-              ), // você pode colocar a imagem real aqui
+            ongCarousel("ONG's para arrecadação de roupas:", [
+              ongItem(imagePath: 'assets/images/ong1.png'),
               ongItem(),
               ongItem(),
             ]),
-            ongCarousel("ONG’s para alimentos não perecíveis:", [
+            ongCarousel("ONG's para alimentos não perecíveis:", [
               ongItem(),
               ongItem(),
               ongItem(),
             ]),
-            ongCarousel("ONG’s favoritas:", [ongItem(), ongItem(), ongItem()]),
-            const SizedBox(height: 80), // Espaço para o bottom bar
+            ongCarousel("ONG's favoritas:", [
+              ongItem(),
+              ongItem(),
+              ongItem(),
+            ]),
+            const SizedBox(height: 80),
           ],
         ),
       ),
@@ -70,13 +84,12 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         color: Colors.grey.shade300,
         borderRadius: BorderRadius.circular(12),
-        image:
-            imagePath != null
-                ? DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.cover,
-                )
-                : null,
+        image: imagePath != null
+            ? DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
     );
   }
@@ -104,9 +117,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      // ação para voltar (em breve)
-                    },
+                    onPressed: () {},
                   ),
                   Expanded(
                     child: ListView(
@@ -116,9 +127,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios),
-                    onPressed: () {
-                      // ação para avançar (em breve)
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
