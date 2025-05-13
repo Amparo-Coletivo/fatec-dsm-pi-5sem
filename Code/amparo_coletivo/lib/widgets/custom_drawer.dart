@@ -3,8 +3,8 @@ import 'package:amparo_coletivo/pages/register_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function? onLogout;
-  
-  const CustomDrawer({Key? key, this.onLogout}) : super(key: key);
+
+  const CustomDrawer({super.key, this.onLogout});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +17,7 @@ class CustomDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: const Row(
                 children: [
-                  Icon(
-                    Icons.list,
-                    color: Colors.white,
-                  ),
+                  Icon(Icons.list, color: Colors.white),
                   SizedBox(width: 16.0),
                   Text(
                     'Mural das ONGs',
@@ -38,57 +35,30 @@ class CustomDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: const Text(
                 'Olá, registre-se para continuar',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 16.0),
               ),
             ),
-            const Divider(
-              color: Colors.white24,
-              height: 1,
-            ),
+            const Divider(color: Colors.white24, height: 1),
             ListTile(
-              leading: const Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Home',
-                style: TextStyle(color: Colors.white),
-              ),
+              leading: const Icon(Icons.home, color: Colors.white),
+              title: const Text('Home', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
                 // Navigate to home page if not already there
               },
             ),
-            const Divider(
-              color: Colors.white24,
-              height: 1,
-            ),
+            const Divider(color: Colors.white24, height: 1),
             ListTile(
-              leading: const Icon(
-                Icons.login,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white),
-              ),
+              leading: const Icon(Icons.login, color: Colors.white),
+              title: const Text('Login', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
                 // Navigate to login page
               },
             ),
-            const Divider(
-              color: Colors.white24,
-              height: 1,
-            ),
+            const Divider(color: Colors.white24, height: 1),
             ListTile(
-              leading: const Icon(
-                Icons.app_registration,
-                color: Colors.white,
-              ),
+              leading: const Icon(Icons.app_registration, color: Colors.white),
               title: const Text(
                 'Registro',
                 style: TextStyle(color: Colors.white),
@@ -101,15 +71,9 @@ class CustomDrawer extends StatelessWidget {
                 );
               },
             ),
-            const Divider(
-              color: Colors.white24,
-              height: 1,
-            ),
+            const Divider(color: Colors.white24, height: 1),
             ListTile(
-              leading: const Icon(
-                Icons.support_agent,
-                color: Colors.white,
-              ),
+              leading: const Icon(Icons.support_agent, color: Colors.white),
               title: const Text(
                 'Suporte',
                 style: TextStyle(color: Colors.white),
@@ -121,15 +85,9 @@ class CustomDrawer extends StatelessWidget {
             ),
             if (onLogout != null) ...[
               const Spacer(),
-              const Divider(
-                color: Colors.white24,
-                height: 1,
-              ),
+              const Divider(color: Colors.white24, height: 1),
               ListTile(
-                leading: const Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ),
+                leading: const Icon(Icons.logout, color: Colors.white),
                 title: const Text(
                   'Logout',
                   style: TextStyle(color: Colors.white),
