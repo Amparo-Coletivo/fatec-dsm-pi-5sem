@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -44,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
             ),
           ),
-          
+
           // Form
           Expanded(
             child: SingleChildScrollView(
@@ -66,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12.0),
                   const Text('Sobrenome:'),
                   const SizedBox(height: 4.0),
@@ -82,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12.0),
                   const Text('E-mail:'),
                   const SizedBox(height: 4.0),
@@ -99,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12.0),
                   const Text('Senha:'),
                   const SizedBox(height: 4.0),
@@ -116,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16.0),
                   const Text('Gênero:'),
                   const SizedBox(height: 8.0),
@@ -133,17 +132,17 @@ class _RegisterPageState extends State<RegisterPage> {
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: _selectedGender == 'male' 
-                                    ? Colors.blue 
-                                    : Colors.grey,
+                                color:
+                                    _selectedGender == 'male'
+                                        ? Colors.blue
+                                        : Colors.grey,
                                 width: _selectedGender == 'male' ? 2.0 : 1.0,
                               ),
                               borderRadius: BorderRadius.circular(4.0),
                             ),
-                            child: Image.asset(
-                              'assets/images/male_icon.png',
-                              height: 40.0,
-                              width: 40.0,
+                            child: const Icon(
+                              Icons.male_outlined,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -160,24 +159,24 @@ class _RegisterPageState extends State<RegisterPage> {
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: _selectedGender == 'female' 
-                                    ? Colors.blue 
-                                    : Colors.grey,
+                                color:
+                                    _selectedGender == 'female'
+                                        ? Colors.blue
+                                        : Colors.grey,
                                 width: _selectedGender == 'female' ? 2.0 : 1.0,
                               ),
                               borderRadius: BorderRadius.circular(4.0),
                             ),
-                            child: Image.asset(
-                              'assets/images/female_icon.png',
-                              height: 40.0,
-                              width: 40.0,
+                            child: Icon(
+                              Icons.female_outlined,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24.0),
                   Center(
                     child: ElevatedButton(
@@ -204,7 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
           ),
-          
+
           // Footer
           Container(
             height: 56.0,
