@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:amparo_coletivo/pages/main_navigation.dart';
 import 'config/theme_config.dart';
 import 'config/theme_notifier.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await Supabase.initialize(
+    url: 'https://fxmmeqkovweeoybhoncf.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4bW1lcWtvdndlZW95YmhvbmNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MjEwMjcsImV4cCI6MjA2MTE5NzAyN30.NTnJEqGrsHfmbiyz3Eq2DHdVfks_63mGv1f_LBNJBOs',
+  );
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeNotifier(),
@@ -18,7 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    final themeNotifier = provider.Provider.of<ThemeNotifier>(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
