@@ -12,6 +12,7 @@ dependencies:
   shimmer: ^3.0.0
   skeletonizer: ^1.4.3
   provider: ^6.1.1
+  supabase_flutter: ^1.0.0
 
 dev_dependencies:
   flutter_test:
