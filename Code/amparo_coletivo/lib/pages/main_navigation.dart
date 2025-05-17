@@ -1,9 +1,10 @@
+import 'package:amparo_coletivo/pages/neo_home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../config/theme_notifier.dart';
 import 'home_page.dart';
 import 'donation_page.dart';
-import 'search_page.dart';
+// import 'search_page.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -16,7 +17,7 @@ class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
   // Lista de páginas
-  final List<Widget> _pages = const [HomePage(), DonationPage(), SearchPage()];
+  final List<Widget> _pages = const [HomePage(), DonationPage(), NeoHomePage()];
 
   // Títulos das páginas
   final List<String> _titles = ['Início', 'Doações', 'Buscar'];
@@ -69,7 +70,7 @@ class _MainNavigationState extends State<MainNavigation> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Colors.black54,
+        // unselectedItemColor: Colors.black54,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         elevation: 5,
