@@ -1,5 +1,19 @@
 # Projeto Interdisciplinar: Amparo Coletivo - Conectando Doadores e ONGs com Flutter
 
+## Participantes
+
+<p align="center">
+  <a href="https://github.com/pipococome">
+    <img src="https://avatars.githubusercontent.com/pipococome" width="15%">
+  </a>
+  <a href="https://github.com/Brubzie">
+    <img src="https://avatars.githubusercontent.com/Brubzie" width="15%">
+  </a>
+  <a href="https://github.com/LeandroAlves1987">
+    <img src="https://avatars.githubusercontent.com/LeandroAlves1987" width="15%">
+  </a>
+</p>
+
 ## Sobre
 
 Em um esforço para promover a solidariedade e facilitar a conexão entre doadores e organizações não governamentais (ONGs), nosso projeto interdisciplinar (PI) visa criar uma plataforma móvel inovadora utilizando o framework Flutter. Com o objetivo de ser um intermediário eficaz entre esses dois grupos, nossa aplicação móvel busca simplificar o processo de doação e aumentar a visibilidade das ONGs.
