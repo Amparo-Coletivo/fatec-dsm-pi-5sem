@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:amparo_coletivo/widgets/custom_drawer.dart'; 
+import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart'; 
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
