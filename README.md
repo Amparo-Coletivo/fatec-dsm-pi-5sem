@@ -37,7 +37,7 @@ Em um esforço para promover a solidariedade e facilitar a conexão entre doador
 ### Tecnologias Utilizadas
 
 * Flutter como framework para desenvolvimento móvel;
-* Firebase como backend para armazenamento de dados e autenticação;
+* Supabase como backend para armazenamento de dados e autenticação;
 * APIs de pagamento para processamento de doações.
 
 ### Impacto Social
