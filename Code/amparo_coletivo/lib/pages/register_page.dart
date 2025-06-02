@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:amparo_coletivo/config/theme_config.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -23,17 +24,17 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  icon: Icon(Icons.arrow_back, color: AppTheme.themeData.primaryColor),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Registre-se',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppTheme.themeData.primaryColor,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -140,9 +141,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               borderRadius: BorderRadius.circular(4.0),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.male_outlined,
-                              color: Colors.white,
+                              color: AppTheme.themeData.primaryColor,
                             ),
                           ),
                         ),
@@ -169,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             child: Icon(
                               Icons.female_outlined,
-                              color: Colors.white,
+                              color: AppTheme.themeData.primaryColor,
                             ),
                           ),
                         ),
@@ -212,19 +213,19 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.home, color: Colors.white),
+                  icon: Icon(Icons.home, color: AppTheme.themeData.primaryColor),
                   onPressed: () {
                     // Navigate to home
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.favorite, color: Colors.white),
+                  icon: Icon(Icons.favorite, color: AppTheme.themeData.primaryColor),
                   onPressed: () {
                     // Navigate to favorites
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.person, color: Colors.white),
+                  icon: Icon(Icons.person, color: AppTheme.themeData.primaryColor),
                   onPressed: () {
                     // Navigate to profile
                   },
