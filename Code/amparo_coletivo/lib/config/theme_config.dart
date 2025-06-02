@@ -32,6 +32,6 @@ class AppTheme {
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
     ),
-    extensions: [SkeletonizerConfigData()],
+    extensions: const [SkeletonizerConfigData()],
   );
 }
