@@ -93,36 +93,39 @@ class _HomePageState extends State<HomePage> {
   /// Card da ONG em Destaque
   Widget _featuredONGCard() {
     return Card(
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 4,
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Imagem no topo do card com borda arredondada
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          Expanded(
             child: Image.asset(
-              'assets/images/ong_destaque.png',
+              'assets/images/ong1.png',
               height: 180,
               width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
           // Informações da ONG
-          const Padding(
-            padding: EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "ONG Esperança Viva",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "A ONG Esperança Viva atua há mais de 10 anos acolhendo famílias em situação de vulnerabilidade com ações sociais, alimentos e educação básica.",
-                ),
-              ],
+          Expanded(
+            flex: 2,
+            child: const Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "ONG Esperança Viva",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "A ONG Esperança Viva atua há mais de 10 anos acolhendo famílias em situação de vulnerabilidade com ações sociais, alimentos e educação básica.",
+                  ),
+                ],
+              ),
             ),
           ),
         ],
