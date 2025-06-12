@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amparo_coletivo/pages/register_page.dart';
+import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function? onLogout;

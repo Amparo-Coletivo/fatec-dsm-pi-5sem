@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amparo_coletivo/pages/register_page.dart';
+import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function? onLogout;
@@ -44,7 +44,8 @@ class CustomDrawer extends StatelessWidget {
               title: const Text('Home', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
-                // Navigate to home page if not already there
+                // Navigar para a home
+                Navigator.pushNamed(context, '/');
               },
             ),
             const Divider(color: Colors.white24, height: 1),
@@ -53,7 +54,8 @@ class CustomDrawer extends StatelessWidget {
               title: const Text('Login', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
-                // Navigate to login page
+                //navegar para a página de login
+                Navigator.pushNamed(context, '/login');
               },
             ),
             const Divider(color: Colors.white24, height: 1),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/about_ong_page.dart'; // Caminho ajustado conforme estrutura
+import 'presentation/pages/about_ong_page.dart';
 
 void main() {
   runApp(const MyApp());
