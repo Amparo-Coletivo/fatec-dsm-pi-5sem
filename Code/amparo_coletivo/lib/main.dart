@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
-import 'package:amparo_coletivo/pages/main_navigation.dart';
+import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
 import 'config/theme_config.dart';
 import 'config/theme_notifier.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
+import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
+import 'package:amparo_coletivo/presentation/pages/about_ong_page.dart';
+
+Future<void> main() async {
   await Supabase.initialize(
     url: 'https://fxmmeqkovweeoybhoncf.supabase.co',
     anonKey:
@@ -14,7 +18,7 @@ void main() async {
   );
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(), 
+      create: (_) => ThemeNotifier(),
       child: const App(),
     ),
   );
@@ -28,12 +32,16 @@ class App extends StatelessWidget {
     final themeNotifier = provider.Provider.of<ThemeNotifier>(context);
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Amparo Coletivo',
-      home: const MainNavigation(),
-      theme: AppTheme.themeData,
-      darkTheme: ThemeData.dark(),
-      themeMode: themeNotifier.themeMode,
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Amparo Coletivo',
+        theme: AppTheme.themeData,
+        darkTheme: ThemeData.dark(),
+        themeMode: themeNotifier.themeMode,
+        routes: {
+          '/': (context) => const MainNavigation(), //tela principal
+          '/login': (context) => const LoginPage(), //tela de login
+          '/register': (context) => const RegisterPage(), //tela de cadastro
+          '/about': (context) => const AboutOngPage(), //tela sobre as ONG's
+        });
   }
 }
