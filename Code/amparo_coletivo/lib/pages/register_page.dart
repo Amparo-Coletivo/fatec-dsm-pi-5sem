@@ -11,6 +11,28 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   String? _selectedGender;
 
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: Colors.grey[200],
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        borderSide: const BorderSide(color: Colors.transparent),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        borderSide: const BorderSide(color: Colors.transparent),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        borderSide: const BorderSide(color: Colors.blue),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,23 +46,20 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back, color: AppTheme.themeData.primaryColor),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  icon: Icon(Icons.arrow_back,
+                      color: AppTheme.themeData.primaryColor),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                Expanded(
-                  child: Text(
-                    'Registre-se',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppTheme.themeData.primaryColor,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                const Spacer(),
+                Text(
+                  'Registre-se',
+                  style: TextStyle(
+                    color: AppTheme.themeData.primaryColor,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 48.0), // Balance the back button
+                const Spacer(),
               ],
             ),
           ),
@@ -53,136 +72,44 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('Nome:'),
-                  const SizedBox(height: 4.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                      decoration: _inputDecoration('Digite seu nome')),
+                  const SizedBox(height: 12),
                   const Text('Sobrenome:'),
-                  const SizedBox(height: 4.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                      decoration: _inputDecoration('Digite seu sobrenome')),
+                  const SizedBox(height: 12),
                   const Text('E-mail:'),
-                  const SizedBox(height: 4.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: const TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: _inputDecoration('example@gmail.com'),
                   ),
-
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: 12),
                   const Text('Senha:'),
-                  const SizedBox(height: 4.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: const TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                    obscureText: true,
+                    decoration: _inputDecoration('Digite sua senha'),
                   ),
-
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 16),
                   const Text('Gênero:'),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 8),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedGender = 'male';
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color:
-                                    _selectedGender == 'male'
-                                        ? Colors.blue
-                                        : Colors.grey,
-                                width: _selectedGender == 'male' ? 2.0 : 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Icon(
-                              Icons.male_outlined,
-                              color: AppTheme.themeData.primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16.0),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedGender = 'female';
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color:
-                                    _selectedGender == 'female'
-                                        ? Colors.blue
-                                        : Colors.grey,
-                                width: _selectedGender == 'female' ? 2.0 : 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Icon(
-                              Icons.female_outlined,
-                              color: AppTheme.themeData.primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
+                      _genderOption('male', Icons.male, 'Masculino'),
+                      const SizedBox(width: 16),
+                      _genderOption('female', Icons.female, 'Feminino'),
                     ],
                   ),
-
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 24),
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Registration logic
+                        // lógica de cadastro
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFE6C649),
@@ -213,27 +140,56 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  icon: Icon(Icons.home, color: AppTheme.themeData.primaryColor),
-                  onPressed: () {
-                    // Navigate to home
-                  },
+                  icon:
+                      Icon(Icons.home, color: AppTheme.themeData.primaryColor),
+                  onPressed: () {},
                 ),
                 IconButton(
-                  icon: Icon(Icons.favorite, color: AppTheme.themeData.primaryColor),
-                  onPressed: () {
-                    // Navigate to favorites
-                  },
+                  icon: Icon(Icons.favorite,
+                      color: AppTheme.themeData.primaryColor),
+                  onPressed: () {},
                 ),
                 IconButton(
-                  icon: Icon(Icons.person, color: AppTheme.themeData.primaryColor),
-                  onPressed: () {
-                    // Navigate to profile
-                  },
+                  icon: Icon(Icons.person,
+                      color: AppTheme.themeData.primaryColor),
+                  onPressed: () {},
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _genderOption(String gender, IconData icon, String label) {
+    final isSelected = _selectedGender == gender;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedGender = gender;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.blue.shade50 : Colors.grey[200],
+            border: Border.all(
+              color: isSelected ? Colors.blue : Colors.grey,
+              width: isSelected ? 2.0 : 1.0,
+            ),
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Column(
+            children: [
+              Icon(icon, size: 32, color: Colors.blue),
+              const SizedBox(height: 4),
+              Text(label),
+            ],
+          ),
+        ),
       ),
     );
   }
