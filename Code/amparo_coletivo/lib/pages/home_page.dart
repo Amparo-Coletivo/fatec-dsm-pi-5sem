@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:amparo_coletivo/widgets/custom_drawer.dart';
+import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
+import 'package:amparo_coletivo/config/theme_config.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,25 +11,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _loading = true; // Controla se os dados ainda estão carregando
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadData(); // Simula o carregamento de dados
+    _loadData();
   }
 
-  // Simula uma requisição de dados com atraso
   Future<void> _loadData() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     setState(() {
       _loading = false;
     });
   }
 
-  // Função chamada ao realizar logout
   void _handleLogout() {
-    Navigator.of(context).pop(); // Fecha o drawer
+    Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Logout efetuado')),
     );
@@ -38,141 +37,174 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mural das ONG's"),
+        title: const Text("Mural das Ongs"),
         backgroundColor: Colors.lightBlue,
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(), // Abre o drawer
+            onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
-      drawer: CustomDrawer(
-          onLogout: _handleLogout), // Drawer personalizado com logout
+      drawer: CustomDrawer(onLogout: _handleLogout),
       body: Skeletonizer(
-        enabled: _loading, // Ativa os skeletons durante o carregamento
-        enableSwitchAnimation: true,
+        enabled: _loading,
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _seasonalHighlights(), // Seção de campanhas sazonais
-            const SizedBox(height: 16),
-            _featuredONGCard(), // Card de destaque de uma ONG
+            const Text(
+              "Destaques sazonais:",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _seasonalCarousel(),
             const SizedBox(height: 24),
-            // Carrossel de ONGs com imagens
-            ongCarousel("ONGs aleatórias", [
-              ongItem(imagePath: 'assets/images/ong1.png'),
-              ongItem(imagePath: 'assets/images/ong2.png'),
-              ongItem(imagePath: 'assets/images/ong3.png'),
-            ]),
-            const SizedBox(
-                height: 80), // Espaço final para não encostar no bottom nav
+            const Text(
+              "Veja mais:",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _featuredONGCard(
+              imagePath: 'assets/images/ong1.png',
+              title: "Sempre ao seu lado",
+              description:
+                  "A ONG Sempre ao seu lado cuida de animais abandonados, oferece tratamentos veterinários e promove adoções conscientes. Está presente em várias cidades com voluntários dedicados.",
+            ),
           ],
         ),
       ),
     );
   }
 
-  /// Seção de Destaques Sazonais
-  Widget _seasonalHighlights() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
-          "Destaques Sazonais",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 8),
-        Text("🧣 Campanha do Agasalho - Doe roupas de inverno!"),
-        Text("🍲 Natal Solidário - Ajude com cestas básicas."),
-        Text("📚 Volta às Aulas - Doe materiais escolares."),
-      ],
+  /// Carrossel de ONGs sazonais
+  Widget _seasonalCarousel() {
+    final List<Map<String, String>> seasonalONGs = [
+      {
+        'image': 'assets/images/ong1.png',
+        'title': 'ONG Agasalho',
+        'desc': 'Campanha do Agasalho: doe roupas e cobertores.'
+      },
+      {
+        'image': 'assets/images/natal_solidario.jpg',
+        'title': 'Natal Solidário',
+        'desc': 'Distribuição de cestas básicas e brinquedos.'
+      },
+      {
+        'image': 'assets/images/aulas.png',
+        'title': 'Volta às Aulas',
+        'desc': 'Arrecadação de mochilas e material escolar.'
+      },
+    ];
+
+    return SizedBox(
+      height: 220, // Altura suficiente para imagem e texto
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: seasonalONGs.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final ong = seasonalONGs[index];
+          return Container(
+            width: 220,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 4,
+                  color: Colors.black12,
+                  offset: Offset(0, 2),
+                )
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      ong['image']!,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        ong['title']!,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.themeData.primaryColor),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        ong['desc']!,
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600]),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
-  /// Card da ONG em Destaque
-  Widget _featuredONGCard() {
+  /// Card de ONG em "Veja mais", com altura dinâmica do texto
+  Widget _featuredONGCard({
+    required String imagePath,
+    required String title,
+    required String description,
+  }) {
     return Card(
-      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 4,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Imagem no topo do card com borda arredondada
-          Expanded(
-            child: Image.asset(
-              'assets/images/ong1.png',
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                imagePath,
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          // Informações da ONG
-          Expanded(
-            flex: 2,
-            child: const Padding(
-              padding: EdgeInsets.all(12),
+            const SizedBox(width: 12),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "ONG Esperança Viva",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    title,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   Text(
-                    "A ONG Esperança Viva atua há mais de 10 anos acolhendo famílias em situação de vulnerabilidade com ações sociais, alimentos e educação básica.",
+                    description,
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Carrossel horizontal com lista de ONGs
-  Widget ongCarousel(String title, List<Widget> items) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 110,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) => items[index],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Card individual com imagem para o carrossel de ONGs
-  Widget ongItem({String? imagePath}) {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        borderRadius: BorderRadius.circular(12),
-        image: imagePath != null
-            ? DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
-              )
-            : null,
+          ],
+        ),
       ),
     );
   }
