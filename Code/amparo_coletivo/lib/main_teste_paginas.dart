@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'presentation/pages/about_ong_page.dart';
+import 'presentation/pages/tela_pagamentos.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AboutOngPage(),
+      home: const TelaPagamentos(),
     );
   }
 }
