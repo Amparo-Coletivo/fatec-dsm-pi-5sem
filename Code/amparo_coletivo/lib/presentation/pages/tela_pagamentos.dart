@@ -6,9 +6,48 @@ class TelaPagamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: Container(
+          color: Colors.blue,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(color: Colors.blue),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Olá, registre-se para continuar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              _drawerItem(icon: Icons.home_outlined, text: 'Home', onTap: () {}),
+              _drawerDivider(),
+              _drawerItem(icon: Icons.login, text: 'Login', onTap: () {}),
+              _drawerDivider(),
+              _drawerItem(icon: Icons.badge_outlined, text: 'Registro', onTap: () {}),
+              _drawerDivider(),
+              _drawerItem(icon: Icons.live_help_outlined, text: 'Suporte', onTap: () {}),
+              _drawerDivider(),
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
         title: const Text('Pagamento'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -73,7 +112,7 @@ class TelaPagamentos extends StatelessWidget {
             const SizedBox(height: 32),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               ),
               onPressed: () {
@@ -98,5 +137,21 @@ class TelaPagamentos extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _drawerItem({
+    required IconData icon,
+    required String text,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.black),
+      title: Text(text, style: const TextStyle(color: Colors.black)),
+      onTap: onTap,
+    );
+  }
+
+  Widget _drawerDivider() {
+    return const Divider(color: Colors.white, thickness: 1, height: 0);
   }
 }
