@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
 import 'package:amparo_coletivo/config/theme_config.dart';
+import 'package:amparo_coletivo/presentation/info_ongs/ong_agasalho.dart';
+import 'package:provider/provider.dart';
+import 'package:amparo_coletivo/config/theme_notifier.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +20,21 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  void _changeTheme(String value) {
+    final themeNotifier = context.read<ThemeNotifier>();
+    switch (value) {
+      case 'Claro':
+        themeNotifier.setTheme(ThemeMode.light);
+        break;
+      case 'Escuro':
+        themeNotifier.setTheme(ThemeMode.dark);
+        break;
+      case 'Sistema':
+        themeNotifier.setTheme(ThemeMode.system);
+        break;
+    }
   }
 
   Future<void> _loadData() async {
@@ -45,6 +63,17 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: _changeTheme,
+            icon: const Icon(Icons.brightness_6),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'Claro', child: Text('Tema Claro')),
+              PopupMenuItem(value: 'Escuro', child: Text('Tema Escuro')),
+              PopupMenuItem(value: 'Sistema', child: Text('Seguir Sistema')),
+            ],
+          ),
+        ],
       ),
       drawer: CustomDrawer(onLogout: _handleLogout),
       body: Skeletonizer(
@@ -76,7 +105,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Carrossel de ONGs sazonais
   Widget _seasonalCarousel() {
     final List<Map<String, String>> seasonalONGs = [
       {
@@ -97,64 +125,79 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return SizedBox(
-      height: 220, // Altura suficiente para imagem e texto
+      height: 220,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: seasonalONGs.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final ong = seasonalONGs[index];
-          return Container(
-            width: 220,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 4,
-                  color: Colors.black12,
-                  offset: Offset(0, 2),
-                )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(16)),
-                    child: Image.asset(
-                      ong['image']!,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => OngAgasalho(
+                    title: ong['title']!,
+                    imagePath: ong['image']!,
+                    description: ong['desc']!,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              width: 220,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 4,
+                    color: Colors.black12,
+                    offset: Offset(0, 2),
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(16)),
+                      child: Image.asset(
+                        ong['image']!,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ong['title']!,
-                        style: TextStyle(
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ong['title']!,
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.themeData.primaryColor),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        ong['desc']!,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600]),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                            color: AppTheme.themeData.primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          ong['desc']!,
+                          style:
+                              TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -162,7 +205,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Card de ONG em "Veja mais", com altura dinâmica do texto
   Widget _featuredONGCard({
     required String imagePath,
     required String title,
@@ -193,7 +235,9 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     title,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(

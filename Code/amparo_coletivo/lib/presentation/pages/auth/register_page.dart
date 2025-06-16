@@ -63,14 +63,13 @@ class _RegisterPageState extends State<RegisterPage> {
         _showError('Erro no cadastro: usuário não criado.');
         return;
       }
-
       // Etapa 2: salvar dados adicionais na tabela 'profiles'
-      await Supabase.instance.client.from('profiles').insert({
+      await Supabase.instance.client.from('usuarios').insert({
         'id': user.id, // mesmo id do auth
         'first_name': nome,
         'last_name': sobrenome,
-        'email': email,
         'gender': _selectedGender,
+        'email': email,
       });
 
       if (!mounted) return;
