@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:amparo_coletivo/presentation/pages/change_password.dart'; // <- IMPORTANTE!
 
 class CustomDrawer extends StatelessWidget {
   final Function? onLogout;
@@ -8,6 +9,8 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Supabase.instance.client.auth.currentUser;
+
     return Drawer(
       child: Container(
         color: Colors.blue,
@@ -33,9 +36,9 @@ class CustomDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16.0),
-              child: const Text(
-                'Olá, registre-se para continuar',
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
+              child: Text(
+                user != null ? 'Bem-vindo!' : 'Olá, registre-se para continuar',
+                style: const TextStyle(color: Colors.white, fontSize: 16.0),
               ),
             ),
             const Divider(color: Colors.white24, height: 1),
@@ -44,58 +47,79 @@ class CustomDrawer extends StatelessWidget {
               title: const Text('Home', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
-                // Navigar para a home
                 Navigator.pushNamed(context, '/');
               },
             ),
             const Divider(color: Colors.white24, height: 1),
-            ListTile(
-              leading: const Icon(Icons.login, color: Colors.white),
-              title: const Text('Login', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                //navegar para a página de login
-                Navigator.pushNamed(context, '/login');
-              },
-            ),
-            const Divider(color: Colors.white24, height: 1),
-            ListTile(
-              leading: const Icon(Icons.app_registration, color: Colors.white),
-              title: const Text(
-                'Registro',
-                style: TextStyle(color: Colors.white),
+
+            // Se estiver deslogado
+            if (user == null) ...[
+              ListTile(
+                leading: const Icon(Icons.login, color: Colors.white),
+                title:
+                    const Text('Login', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/login');
+                },
               ),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer first
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RegisterPage()),
-                );
-              },
-            ),
-            const Divider(color: Colors.white24, height: 1),
+              const Divider(color: Colors.white24, height: 1),
+              ListTile(
+                leading:
+                    const Icon(Icons.app_registration, color: Colors.white),
+                title: const Text('Registro',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/register');
+                },
+              ),
+              const Divider(color: Colors.white24, height: 1),
+            ],
+
+            // Se estiver logado
+            if (user != null) ...[
+              ListTile(
+                leading: const Icon(Icons.password, color: Colors.white),
+                title: const Text('Trocar senha',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ChangePasswordPage()),
+                  );
+                },
+              ),
+              const Divider(color: Colors.white24, height: 1),
+            ],
+
             ListTile(
               leading: const Icon(Icons.support_agent, color: Colors.white),
-              title: const Text(
-                'Suporte',
-                style: TextStyle(color: Colors.white),
-              ),
+              title:
+                  const Text('Suporte', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
-                // Navigate to support page
+                // Adicione rota se tiver uma tela de suporte
               },
             ),
-            if (onLogout != null) ...[
+
+            // Se estiver logado, mostrar logout no final
+            if (user != null && onLogout != null) ...[
               const Spacer(),
               const Divider(color: Colors.white24, height: 1),
               ListTile(
                 leading: const Icon(Icons.logout, color: Colors.white),
-                title: const Text(
-                  'Logout',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  onLogout!();
+                title:
+                    const Text('Sair', style: TextStyle(color: Colors.white)),
+                onTap: () async {
+                  await Supabase.instance.client.auth.signOut();
+
+                  if (context.mounted) {
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/login', (route) => false);
+                  }
                 },
               ),
             ],
