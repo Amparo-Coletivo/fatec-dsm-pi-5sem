@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-var logger = Logger();
+import 'package:amparo_coletivo/services/logger_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -69,7 +67,8 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () { // Volta para a tela anterior
+          onPressed: () {
+            // Volta para a tela anterior
             Navigator.pop(context);
           },
         ),
