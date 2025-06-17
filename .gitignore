@@ -120,3 +120,4 @@ app.*.symbols
 
 *.pdf
 .vscode/
+Code/amparo_coletivo/android/local.properties
