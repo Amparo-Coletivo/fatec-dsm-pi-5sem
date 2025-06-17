@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart'; // ajuste o caminho se necessário
+import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
 
 class AboutOngPage extends StatelessWidget {
   const AboutOngPage({super.key});
