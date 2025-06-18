@@ -10,6 +10,8 @@ import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
 import 'package:amparo_coletivo/presentation/pages/about_ong_page.dart';
 import 'package:amparo_coletivo/presentation/pages/change_password.dart';
+import 'package:amparo_coletivo/presentation/pages/tela_pagamentos.dart';
+
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -50,6 +52,8 @@ class App extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/about': (context) => const AboutOngPage(),
         '/trocar_senha': (context) => const ChangePasswordPage(),
+        '/pagamentos': (context) => const TelaPagamentos(),
+
       },
     );
   }

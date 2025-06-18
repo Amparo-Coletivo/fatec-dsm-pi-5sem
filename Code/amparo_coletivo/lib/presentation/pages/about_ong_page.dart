@@ -10,7 +10,7 @@ class AboutOngPage extends StatelessWidget {
         PageController(viewportFraction: 0.85);
 
     return Scaffold(
-      drawer: const CustomDrawer(), // Usando seu Drawer principal
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text('Sobre a ONG'),
@@ -23,7 +23,7 @@ class AboutOngPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Lógica de doação
+          Navigator.pushNamed(context, '/pagamentos'); // <- AQUI FOI A MUDANÇA
         },
         label: const Text('Doar'),
         icon: const Icon(Icons.volunteer_activism),
@@ -37,11 +37,8 @@ class AboutOngPage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
         ],
         onTap: (index) {
-          // Navegação com base no índice
           if (index == 0) {
             Navigator.pushNamed(context, '/');
-          } else if (index == 1) {
-            // já está na página atual
           } else if (index == 2) {
             Navigator.pushNamed(context, '/perfil');
           }
