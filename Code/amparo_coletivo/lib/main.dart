@@ -49,7 +49,7 @@ class App extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/about': (context) => const AboutOngPage(),
-        '/trocar_senha': (context) => const ChangePasswordPage(),
+        '/change_password': (context) => const ChangePasswordPage(),
       },
     );
   }
