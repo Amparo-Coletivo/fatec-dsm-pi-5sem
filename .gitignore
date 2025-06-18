@@ -96,4 +96,6 @@ lib/generated_plugin_registrant.dart
 # Visual Studio Code settings
 .vscode/
 
-# End of https://www.toptal.com/developers/gitignore/api/flutter,dart
+# IntelliJ related
+.idea/
+Code/amparo_coletivo/android/local.properties
