@@ -10,12 +10,13 @@ import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
 import 'package:amparo_coletivo/presentation/pages/about_ong_page.dart';
 import 'package:amparo_coletivo/presentation/pages/change_password.dart';
+import 'package:amparo_coletivo/presentation/pages/admin_page.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
-    url: 'https://atmvktiqiscdbfogvplw.supabase.co',
+    url: 'https://luooeidsfkypyctvytok.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0bXZrdGlxaXNjZGJmb2d2cGx3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1MjA0OTcsImV4cCI6MjA2NTA5NjQ5N30.l0IxG1LXF_NJ-EfsT0aYxDNeRhEvmhCZS2jqcs1cU-Q',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1b29laWRzZmt5cHljdHZ5dG9rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyMDMzNjcsImV4cCI6MjA2NTc3OTM2N30.kM_S-oLmRTTuBkbpKW2MUn3Ngl7ic0ZaGb-sltYzB0E',
   );
   runApp(
     ChangeNotifierProvider(
@@ -50,6 +51,7 @@ class App extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/about': (context) => const AboutOngPage(),
         '/change_password': (context) => const ChangePasswordPage(),
+        '/admin': (context) => const AdminPage(),
       },
     );
   }

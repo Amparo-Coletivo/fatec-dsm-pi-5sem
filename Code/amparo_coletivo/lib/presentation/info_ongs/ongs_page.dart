@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
-import 'package:flutter/material.dart' hide CarouselController;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
+import 'package:amparo_coletivo/presentation/pages/donation.dart';
 
-class OngAgasalho extends StatelessWidget {
-  final String title;
-  final String imagePath;
-  final String description;
+class OngsPage extends StatelessWidget {
+  final Map<String, dynamic> ongData;
 
-  const OngAgasalho({
-    super.key,
-    required this.title,
-    required this.imagePath,
-    required this.description,
-  });
+  const OngsPage({super.key, required this.ongData});
 
   @override
   Widget build(BuildContext context) {
+    final String title = ongData['nome'] ?? 'ONG sem nome';
+    final String description = ongData['descricao'] ?? 'Sem descrição';
+    final String imagePath = ongData['imagem'] ?? 'assets/imagem_padrao.jpg';
+
     final List<String> imagensCarrossel = [
-      'assets/imagem1.jpg',
-      'assets/imagem2.jpg',
-      'assets/imagem3.jpg',
+      ongData['foto1'] ?? 'assets/imagem1.jpg',
+      ongData['foto2'] ?? 'assets/imagem2.jpg',
+      ongData['foto3'] ?? 'assets/imagem3.jpg',
     ];
 
     return Scaffold(
@@ -30,7 +26,7 @@ class OngAgasalho extends StatelessWidget {
         backgroundColor: Colors.blue,
         elevation: 0,
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -47,12 +43,19 @@ class OngAgasalho extends StatelessWidget {
                 child: Column(
                   children: [
                     ClipOval(
-                      child: Image.asset(
-                        imagePath,
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+                      child: imagePath.startsWith("http")
+                          ? Image.network(
+                              imagePath,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              imagePath,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -67,7 +70,7 @@ class OngAgasalho extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Carrossel de imagens (portfólio)
+              // Carrossel
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -92,7 +95,9 @@ class OngAgasalho extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.blue[100],
                       image: DecorationImage(
-                        image: AssetImage(item),
+                        image: item.startsWith("http")
+                            ? NetworkImage(item)
+                            : AssetImage(item) as ImageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -101,7 +106,7 @@ class OngAgasalho extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Informações adicionais
+              // Descrição
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -128,7 +133,7 @@ class OngAgasalho extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              // Botão Doar
+              // Botão doar
               SizedBox(
                 width: 140,
                 child: ElevatedButton(
@@ -136,7 +141,7 @@ class OngAgasalho extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MainNavigation(),
+                        builder: (context) => DonationPage(ongData: ongData),
                       ),
                     );
                   },
