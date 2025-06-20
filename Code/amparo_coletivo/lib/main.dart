@@ -1,3 +1,4 @@
+// Arquivo principal do aplicativo Amparo Coletivo
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
@@ -6,6 +7,7 @@ import 'config/theme_notifier.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
+// Importando as páginas
 import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
 import 'package:amparo_coletivo/presentation/pages/about_ong_page.dart';
