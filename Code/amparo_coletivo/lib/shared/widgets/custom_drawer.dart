@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:amparo_coletivo/presentation/pages/change_password.dart'; // <- IMPORTANTE!
+import 'package:amparo_coletivo/presentation/pages/change_password.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function? onLogout;
@@ -10,6 +10,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Supabase.instance.client.auth.currentUser;
+    const adminEmail = 'leandro.alves13012004@gmail.com';
 
     return Drawer(
       child: Container(
@@ -52,7 +53,6 @@ class CustomDrawer extends StatelessWidget {
             ),
             const Divider(color: Colors.white24, height: 1),
 
-            // Se estiver deslogado
             if (user == null) ...[
               ListTile(
                 leading: const Icon(Icons.login, color: Colors.white),
@@ -77,7 +77,6 @@ class CustomDrawer extends StatelessWidget {
               const Divider(color: Colors.white24, height: 1),
             ],
 
-            // Se estiver logado
             if (user != null) ...[
               ListTile(
                 leading: const Icon(Icons.password, color: Colors.white),
@@ -101,11 +100,26 @@ class CustomDrawer extends StatelessWidget {
                   const Text('Suporte', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context);
-                // Adicione rota se tiver uma tela de suporte
+                // Adicione sua tela de suporte se quiser
               },
             ),
 
-            // Se estiver logado, mostrar logout no final
+            // Mostra o botão "Administração" apenas para o admin
+            if (user != null && user.email == adminEmail) ...[
+              const Divider(color: Colors.white24, height: 1),
+              ListTile(
+                leading:
+                    const Icon(Icons.admin_panel_settings, color: Colors.white),
+                title: const Text('Administração',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/admin');
+                },
+              ),
+            ],
+
+            // Logout ao final
             if (user != null && onLogout != null) ...[
               const Spacer(),
               const Divider(color: Colors.white24, height: 1),
@@ -115,7 +129,6 @@ class CustomDrawer extends StatelessWidget {
                     const Text('Sair', style: TextStyle(color: Colors.white)),
                 onTap: () async {
                   await Supabase.instance.client.auth.signOut();
-
                   if (context.mounted) {
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil('/login', (route) => false);
