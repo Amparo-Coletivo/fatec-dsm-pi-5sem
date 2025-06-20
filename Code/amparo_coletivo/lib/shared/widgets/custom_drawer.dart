@@ -1,11 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:amparo_coletivo/presentation/pages/change_password.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function? onLogout;
 
   const CustomDrawer({super.key, this.onLogout});
+
+  // Função para abrir o e-mail de suporte
+  void _launchEmail(BuildContext context) async {
+    const String email = 'AmparoColetivo.suporte@gmail.com';
+    const String subject = 'Suporte App - Amparo Coletivo';
+    const String body = 'Olá, preciso de ajuda com o seguinte:';
+
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query: 'subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}',
+    );
+
+    // Fecha o Drawer antes de tentar abrir o e-mail
+    Navigator.pop(context);
+
+    if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri);
+    } else {
+      // Garante que o context ainda está válido antes de mostrar o SnackBar
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Não foi possível abrir o aplicativo de e-mail.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,10 +129,7 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.support_agent, color: Colors.white),
               title:
                   const Text('Suporte', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                // Adicione sua tela de suporte se quiser
-              },
+              onTap: () => _launchEmail(context),
             ),
 
             // Mostra o botão "Administração" apenas para o admin
