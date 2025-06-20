@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
-import 'package:amparo_coletivo/config/theme_config.dart';
-import 'package:amparo_coletivo/presentation/info_ongs/ong_agasalho.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
 import 'package:amparo_coletivo/config/theme_notifier.dart';
+import 'package:amparo_coletivo/presentation/info_ongs/ongs_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,11 +15,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _loading = true;
+  List<Map<String, dynamic>> allOngs = [];
+  List<Map<String, dynamic>> destaques = [];
 
   @override
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final client = Supabase.instance.client;
+
+    final destaqueResponse = await client
+        .from('ongs')
+        .select()
+        .eq('highlighted', true)
+        .order('created_at');
+
+    final todasResponse =
+        await client.from('ongs').select().order('created_at');
+
+    setState(() {
+      destaques = List<Map<String, dynamic>>.from(destaqueResponse);
+      allOngs = List<Map<String, dynamic>>.from(todasResponse);
+      _loading = false;
+    });
   }
 
   void _changeTheme(String value) {
@@ -37,13 +58,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _loadData() async {
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() {
-      _loading = false;
-    });
-  }
-
   void _handleLogout() {
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -55,7 +69,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mural das Ongs"),
+        title: const Text("Mural das ONGs"),
         backgroundColor: Colors.lightBlue,
         leading: Builder(
           builder: (context) => IconButton(
@@ -89,16 +103,11 @@ class _HomePageState extends State<HomePage> {
             _seasonalCarousel(),
             const SizedBox(height: 24),
             const Text(
-              "Veja mais:",
+              "Todas as ONGs:",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-            _featuredONGCard(
-              imagePath: 'assets/images/ong1.png',
-              title: "Sempre ao seu lado",
-              description:
-                  "A ONG Sempre ao seu lado cuida de animais abandonados, oferece tratamentos veterinários e promove adoções conscientes. Está presente em várias cidades com voluntários dedicados.",
-            ),
+            ...allOngs.map((ong) => _ongCard(ong)),
           ],
         ),
       ),
@@ -106,43 +115,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _seasonalCarousel() {
-    final List<Map<String, String>> seasonalONGs = [
-      {
-        'image': 'assets/images/ong1.png',
-        'title': 'ONG Agasalho',
-        'desc': 'Campanha do Agasalho: doe roupas e cobertores.'
-      },
-      {
-        'image': 'assets/images/natal_solidario.jpg',
-        'title': 'Natal Solidário',
-        'desc': 'Distribuição de cestas básicas e brinquedos.'
-      },
-      {
-        'image': 'assets/images/aulas.png',
-        'title': 'Volta às Aulas',
-        'desc': 'Arrecadação de mochilas e material escolar.'
-      },
-    ];
+    if (destaques.isEmpty) {
+      return const Text("Nenhuma ONG em destaque no momento.");
+    }
 
     return SizedBox(
       height: 220,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: seasonalONGs.length,
+        itemCount: destaques.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final ong = seasonalONGs[index];
+          final ong = destaques[index];
 
           return GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => OngAgasalho(
-                    title: ong['title']!,
-                    imagePath: ong['image']!,
-                    description: ong['desc']!,
-                  ),
+                  builder: (_) => OngsPage(ongData: {
+                    'nome': ong['title'],
+                    'imagem': ong['image_url'],
+                    'descricao': ong['description'],
+                  }),
                 ),
               );
             },
@@ -152,11 +147,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 4,
-                    color: Colors.black12,
-                    offset: Offset(0, 2),
-                  )
+                  BoxShadow(blurRadius: 4, color: Colors.black12),
                 ],
               ),
               child: Column(
@@ -166,34 +157,25 @@ class _HomePageState extends State<HomePage> {
                     child: ClipRRect(
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(16)),
-                      child: Image.asset(
-                        ong['image']!,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                      child: ong['image_url'] != null
+                          ? Image.network(
+                              ong['image_url'],
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/images/placeholder.jpg',
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ong['title']!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.themeData.primaryColor,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          ong['desc']!,
-                          style:
-                              TextStyle(fontSize: 12, color: Colors.grey[600]),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    child: Text(
+                      ong['title'],
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ),
                 ],
@@ -205,50 +187,50 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _featuredONGCard({
-    required String imagePath,
-    required String title,
-    required String description,
-  }) {
+  Widget _ongCard(Map<String, dynamic> ong) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                imagePath,
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    description,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-            ),
-          ],
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(12),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: ong['image_url'] != null && ong['image_url'].startsWith("http")
+              ? Image.network(
+                  ong['image_url'],
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  'assets/images/placeholder.jpg',
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                ),
         ),
+        title: Text(
+          ong['title'] ?? 'Sem nome',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          ong['description'] ?? '',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OngsPage(ongData: {
+                'nome': ong['title'],
+                'imagem': ong['image_url'],
+                'descricao': ong['description'],
+              }),
+            ),
+          );
+        },
       ),
     );
   }
