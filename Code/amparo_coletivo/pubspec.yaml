@@ -17,6 +17,7 @@ dependencies:
   flutter_riverpod: ^2.0.0
   logger: ^2.0.2
   carousel_slider: ^5.1.1
+  url_launcher: ^6.3.1
 
 
 
