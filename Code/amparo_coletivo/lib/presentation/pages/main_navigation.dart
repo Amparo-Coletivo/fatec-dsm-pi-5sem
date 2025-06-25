@@ -1,7 +1,7 @@
 import 'package:amparo_coletivo/presentation/pages/perfil_page.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import 'donation_page.dart';
+import 'categories.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -17,7 +17,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _pages = const [
     HomePage(),
-    DonationPage(),
+    Categories(),
     PerfilPage(),
   ];
 

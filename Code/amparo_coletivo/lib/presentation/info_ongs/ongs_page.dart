@@ -33,7 +33,7 @@ class OngsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Logo e nome da ONG
+              // Logo da ONG
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -89,15 +89,17 @@ class OngsPage extends StatelessWidget {
                   enableInfiniteScroll: false,
                 ),
                 items: imagensCarrossel.map((item) {
+                  final bool isNetwork = item.startsWith("http");
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.blue[100],
                       image: DecorationImage(
-                        image: item.startsWith("http")
+                        image: isNetwork
                             ? NetworkImage(item)
-                            : AssetImage(item) as ImageProvider,
+                            : const AssetImage('assets/imagem_padrao.jpg')
+                                as ImageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -133,7 +135,7 @@ class OngsPage extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              // Botão doar
+              // Botão Doar
               SizedBox(
                 width: 140,
                 child: ElevatedButton(

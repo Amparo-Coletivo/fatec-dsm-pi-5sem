@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:amparo_coletivo/services/logger_service.dart';
+import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,39 +22,29 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _loading = true);
     logger.i('Tentando login com: $email');
 
-    // Realiza os testes do Login pelo SubaBase
     try {
       final response = await Supabase.instance.client.auth
           .signInWithPassword(email: email, password: password);
 
-      if (!mounted) return; // Protege o uso do context abaixo
+      if (!mounted) return;
 
-      // Verifica se o usuário foi retornado
       if (response.user != null) {
         logger.i('Login bem-sucedido!');
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const MainNavigation()),
+        );
       } else {
-        // Se o usuário for nulo, exibe um erro
-        logger.w('Usuário nulo após login');
         _showError('Erro ao fazer login.');
       }
     } catch (e) {
-      // Captura e exibe erros de login
       logger.e('Erro de login: $e');
-      if (mounted) {
-        // Verifica se o erro é de autenticação
-        _showError('Email ou senha inválidos.');
-      }
+      _showError('Email ou senha inválidos.');
     } finally {
-      // Garante que o estado de loading seja atualizado
-      if (mounted) {
-        setState(() => _loading = false);
-      }
+      if (mounted) setState(() => _loading = false);
     }
   }
 
-  // Função para exibir mensagens de erro
-  // Utiliza o SnackBar para mostrar erros de forma amigável
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
@@ -67,24 +58,10 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Volta para a tela anterior
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
         title: const Text('Fazer login'),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        backgroundColor: Colors.blue.shade200,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.volunteer_activism), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
-        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -138,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            //adicionar recuperação de senha futuramente
+                            // Recuperação de senha futura
                           },
                           child: const Text(
                             'Esqueceu a senha?',

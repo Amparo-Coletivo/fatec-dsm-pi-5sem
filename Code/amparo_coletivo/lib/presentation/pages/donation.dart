@@ -14,12 +14,6 @@ class DonationPage extends StatefulWidget {
 class _DonationPageState extends State<DonationPage> {
   bool _isLoading = false;
 
-  final String pixCode =
-      '00020126580014BR.GOV.BCB.PIX013635082858-8168-43eb-a553-8c7eb6cf8bd45204000053039865802BR5921Bruno Alves dos Anjos6009SAO PAULO62140510h8XXxMOu8G6304499E';
-
-  // Caminho imagem do QR Code
-  final String qrCodeImagePath = 'assets/images/qrpix.png';
-
   void _registerDonation() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user == null) {
@@ -41,7 +35,7 @@ class _DonationPageState extends State<DonationPage> {
       await Supabase.instance.client.from('doacoes').insert({
         'user_id': user.id,
         'ong_id': ongId,
-        'valor': null, // Valor não informado
+        'valor': 0.0,
         'status': 'pendente',
         'data': DateTime.now().toIso8601String(),
       });
@@ -55,7 +49,7 @@ class _DonationPageState extends State<DonationPage> {
     }
   }
 
-  void _copyPixCode() {
+  void _copyPixCode(String pixCode) {
     Clipboard.setData(ClipboardData(text: pixCode));
     _showSnackbar('Código PIX copiado para a área de transferência!');
   }
@@ -71,8 +65,11 @@ class _DonationPageState extends State<DonationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String ongName =
-        widget.ongData['title'] ?? widget.ongData['nome'] ?? 'ONG';
+    debugPrint('📦 Dados recebidos na DonationPage: ${widget.ongData}');
+
+    final String ongName = widget.ongData['title'] ?? 'ONG';
+    final String? pixCode = widget.ongData['pix_copia_cola'];
+    final String? qrCodeUrl = widget.ongData['pix_qrcode_url'];
 
     return Scaffold(
       appBar: AppBar(
@@ -81,88 +78,106 @@ class _DonationPageState extends State<DonationPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Text(
-                'Escaneie o QR Code abaixo ou copie o código Pix.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-
-              // Mostrando a imagem do QR Code
-              Center(
-                child: Image.asset(
-                  qrCodeImagePath,
-                  width: 250,
-                  height: 250,
-                  fit: BoxFit.contain,
+        child: pixCode == null || pixCode.trim().isEmpty
+            ? Center(
+                child: Text(
+                  'Esta ONG ainda não cadastrou uma chave Pix.',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
-              ),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Text(
+                      'Escaneie o QR Code abaixo ou copie o código Pix.',
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 24),
 
-              const SizedBox(height: 24),
-              const Text(
-                'Código Pix (Copia e Cola):',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
+                    // QR Code
+                    qrCodeUrl != null && qrCodeUrl.trim().isNotEmpty
+                        ? Image.network(
+                            qrCodeUrl,
+                            width: 250,
+                            height: 250,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => const Icon(
+                              Icons.qr_code_2,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.qr_code_2,
+                            size: 120,
+                            color: Colors.grey,
+                          ),
 
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: SelectableText(
-                  pixCode,
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Código Pix (Copia e Cola):',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
 
-              const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: SelectableText(
+                        pixCode,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ),
 
-              ElevatedButton.icon(
-                onPressed: _copyPixCode,
-                icon: const Icon(Icons.copy),
-                label: const Text('Copiar Código Pix'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
+                    const SizedBox(height: 8),
 
-              const SizedBox(height: 32),
-
-              ElevatedButton.icon(
-                onPressed: _isLoading ? null : _registerDonation,
-                icon: const Icon(Icons.check_circle),
-                label: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
+                    ElevatedButton.icon(
+                      onPressed: () => _copyPixCode(pixCode),
+                      icon: const Icon(Icons.copy),
+                      label: const Text('Copiar Código Pix'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                      )
-                    : const Text('Registrar minha Doação'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    ElevatedButton.icon(
+                      onPressed: _isLoading ? null : _registerDonation,
+                      icon: const Icon(Icons.check_circle),
+                      label: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text('Registrar minha Doação'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
