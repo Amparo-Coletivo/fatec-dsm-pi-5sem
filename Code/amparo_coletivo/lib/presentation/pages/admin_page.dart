@@ -12,18 +12,39 @@ class _AdminPageState extends State<AdminPage> {
   final _titleController = TextEditingController();
   final _imageUrlController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _pixCodeController = TextEditingController();
+  final _pixQrUrlController = TextEditingController();
+
+  String? _categorySelecionada;
   bool _highlighted = false;
   bool _isLoading = false;
 
   final supabase = Supabase.instance.client;
 
+  final List<String> _category = [
+    'Saúde',
+    'Educação',
+    'Meio Ambiente',
+    'Animais',
+    'Moradia',
+    'Outros',
+  ];
+
   Future<void> _submitOng() async {
     final title = _titleController.text.trim();
     final imageUrl = _imageUrlController.text.trim();
     final description = _descriptionController.text.trim();
+    final pixCode = _pixCodeController.text.trim();
+    final pixQrUrl = _pixQrUrlController.text.trim();
 
-    if (title.isEmpty || imageUrl.isEmpty || description.isEmpty) {
-      _showSnackbar('Preencha todos os campos', isError: true);
+    if (title.isEmpty ||
+        imageUrl.isEmpty ||
+        description.isEmpty ||
+        pixCode.isEmpty ||
+        _categorySelecionada == null) {
+      _showSnackbar(
+          'Preencha todos os campos obrigatórios (inclusive categoria)',
+          isError: true);
       return;
     }
 
@@ -35,6 +56,9 @@ class _AdminPageState extends State<AdminPage> {
         'image_url': imageUrl,
         'description': description,
         'highlighted': _highlighted,
+        'pix_copia_cola': pixCode,
+        'pix_qrcode_url': pixQrUrl,
+        'category': _categorySelecionada,
         'created_at': DateTime.now().toIso8601String(),
       });
 
@@ -51,7 +75,12 @@ class _AdminPageState extends State<AdminPage> {
     _titleController.clear();
     _imageUrlController.clear();
     _descriptionController.clear();
-    setState(() => _highlighted = false);
+    _pixCodeController.clear();
+    _pixQrUrlController.clear();
+    setState(() {
+      _highlighted = false;
+      _categorySelecionada = null;
+    });
   }
 
   void _showSnackbar(String message, {bool isError = false}) {
@@ -88,6 +117,33 @@ class _AdminPageState extends State<AdminPage> {
               controller: _descriptionController,
               decoration: const InputDecoration(labelText: 'Descrição'),
               maxLines: 3,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _pixCodeController,
+              decoration:
+                  const InputDecoration(labelText: 'Chave Pix (copia e cola)'),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _pixQrUrlController,
+              decoration: const InputDecoration(
+                  labelText: 'URL da imagem do QR Code (opcional)'),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(labelText: 'Categoria'),
+              value: _categorySelecionada,
+              items: _category
+                  .map((cat) => DropdownMenuItem<String>(
+                        value: cat,
+                        child: Text(cat),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() => _categorySelecionada = value);
+              },
             ),
             const SizedBox(height: 12),
             Row(

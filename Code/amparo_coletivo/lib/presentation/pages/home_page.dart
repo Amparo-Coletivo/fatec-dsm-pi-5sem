@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: 220,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.lightBlue.shade400,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: const [
                   BoxShadow(blurRadius: 4, color: Colors.black12),

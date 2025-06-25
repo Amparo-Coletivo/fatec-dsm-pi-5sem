@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 // Importando as páginas
 import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
-import 'package:amparo_coletivo/presentation/pages/about_ong_page.dart';
 import 'package:amparo_coletivo/presentation/pages/change_password.dart';
 import 'package:amparo_coletivo/presentation/pages/admin_page.dart';
 
@@ -51,7 +50,7 @@ class App extends StatelessWidget {
         '/': (context) => const MainNavigation(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
-        '/about': (context) => const AboutOngPage(),
+        //'/about': (context) => const AboutOngPage(),
         '/change_password': (context) => const ChangePasswordPage(),
         '/admin': (context) => const AdminPage(),
       },

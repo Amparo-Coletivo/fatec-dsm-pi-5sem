@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:amparo_coletivo/presentation/pages/donation.dart';
 import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
 
 class AboutOngPage extends StatelessWidget {
-  const AboutOngPage({super.key});
+  final Map<String, dynamic> ongData;
+
+  const AboutOngPage({super.key, required this.ongData});
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +13,10 @@ class AboutOngPage extends StatelessWidget {
         PageController(viewportFraction: 0.85);
 
     return Scaffold(
-      drawer: const CustomDrawer(), // Usando seu Drawer principal
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Sobre a ONG'),
+        title: Text(ongData['title'] ?? 'Sobre a ONG'),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
@@ -23,7 +26,12 @@ class AboutOngPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Lógica de doação
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DonationPage(ongData: ongData),
+            ),
+          );
         },
         label: const Text('Doar'),
         icon: const Icon(Icons.volunteer_activism),
@@ -37,11 +45,8 @@ class AboutOngPage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
         ],
         onTap: (index) {
-          // Navegação com base no índice
           if (index == 0) {
             Navigator.pushNamed(context, '/');
-          } else if (index == 1) {
-            // já está na página atual
           } else if (index == 2) {
             Navigator.pushNamed(context, '/perfil');
           }
@@ -53,33 +58,44 @@ class AboutOngPage extends StatelessWidget {
             const SizedBox(height: 16),
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'assets/images/exemplo_ong.png',
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 200,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: Colors.grey.shade300,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: 200,
-                  alignment: Alignment.center,
-                  child: const Text("Logo não encontrada"),
-                ),
-              ),
+              child: ongData['image_url'] != null &&
+                      ongData['image_url'].toString().isNotEmpty
+                  ? Image.network(
+                      ongData['image_url'],
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey.shade300,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 200,
+                        alignment: Alignment.center,
+                        child: const Text("Imagem não carregada"),
+                      ),
+                    )
+                  : Container(
+                      color: Colors.grey.shade300,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 200,
+                      alignment: Alignment.center,
+                      child: const Text("Sem imagem disponível"),
+                    ),
             ),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   Text(
-                    "Sobre a ONG",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ongData['title'] ?? 'ONG',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
-                    "A Associação Sempre a Seu Lado atua no resgate e acolhimento de animais em situação de vulnerabilidade, promovendo o bem-estar e adoção responsável.",
+                    ongData['description'] ??
+                        'Essa ONG ainda não possui uma descrição.',
                     textAlign: TextAlign.center,
                   ),
                 ],
