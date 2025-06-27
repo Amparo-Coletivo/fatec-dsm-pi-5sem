@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
 
 var logger = Logger();
 
@@ -51,7 +52,6 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _loading = true);
 
     try {
-      // Etapa 1: criar conta no Supabase Auth
       final response = await Supabase.instance.client.auth.signUp(
         email: email,
         password: senha,
@@ -63,9 +63,9 @@ class _RegisterPageState extends State<RegisterPage> {
         _showError('Erro no cadastro: usuário não criado.');
         return;
       }
-      // Etapa 2: salvar dados adicionais na tabela 'profiles'
+
       await Supabase.instance.client.from('usuarios').insert({
-        'id': user.id, // mesmo id do auth
+        'id': user.id,
         'first_name': nome,
         'last_name': sobrenome,
         'gender': _selectedGender,
@@ -74,8 +74,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (!mounted) return;
 
-      // Sucesso: redirecionar para login
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainNavigation()),
+      );
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Cadastro realizado com sucesso!')),
       );
@@ -96,116 +99,79 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            height: 56.0,
-            color: Colors.blue,
-            child: Row(
+      appBar: AppBar(
+        title: const Text('Registre-se'),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Nome:'),
+            const SizedBox(height: 6),
+            TextFormField(
+                controller: _nomeController,
+                decoration: _inputDecoration('Digite seu nome')),
+            const SizedBox(height: 12),
+            const Text('Sobrenome:'),
+            const SizedBox(height: 6),
+            TextFormField(
+                controller: _sobrenomeController,
+                decoration: _inputDecoration('Digite seu sobrenome')),
+            const SizedBox(height: 12),
+            const Text('E-mail:'),
+            const SizedBox(height: 6),
+            TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: _inputDecoration('example@gmail.com'),
+            ),
+            const SizedBox(height: 12),
+            const Text('Senha:'),
+            const SizedBox(height: 6),
+            TextFormField(
+              controller: _senhaController,
+              obscureText: true,
+              decoration: _inputDecoration('Digite sua senha'),
+            ),
+            const SizedBox(height: 16),
+            const Text('Gênero:'),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                const Expanded(
-                  child: Text(
-                    'Registre-se',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(width: 48),
+                _genderOption('male', Icons.male, 'Masculino'),
+                const SizedBox(width: 16),
+                _genderOption('female', Icons.female, 'Feminino'),
               ],
             ),
-          ),
-          // Formulário
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Nome:'),
-                  const SizedBox(height: 6),
-                  TextFormField(
-                      controller: _nomeController,
-                      decoration: _inputDecoration('Digite seu nome')),
-                  const SizedBox(height: 12),
-                  const Text('Sobrenome:'),
-                  const SizedBox(height: 6),
-                  TextFormField(
-                      controller: _sobrenomeController,
-                      decoration: _inputDecoration('Digite seu sobrenome')),
-                  const SizedBox(height: 12),
-                  const Text('E-mail:'),
-                  const SizedBox(height: 6),
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: _inputDecoration('example@gmail.com'),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text('Senha:'),
-                  const SizedBox(height: 6),
-                  TextFormField(
-                    controller: _senhaController,
-                    obscureText: true,
-                    decoration: _inputDecoration('Digite sua senha'),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text('Gênero:'),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _genderOption('male', Icons.male, 'Masculino'),
-                      const SizedBox(width: 16),
-                      _genderOption('female', Icons.female, 'Feminino'),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: _loading ? null : _signUp,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFE6C649),
-                        minimumSize: const Size(200, 48),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24.0)),
+            const SizedBox(height: 24),
+            Center(
+              child: ElevatedButton(
+                onPressed: _loading ? null : _signUp,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE6C649),
+                  minimumSize: const Size(200, 48),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24.0)),
+                ),
+                child: _loading
+                    ? const CircularProgressIndicator(color: Colors.black)
+                    : const Text(
+                        'Inscreva-se',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
                       ),
-                      child: _loading
-                          ? const CircularProgressIndicator(color: Colors.black)
-                          : const Text(
-                              'Inscreva-se',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                    ),
-                  ),
-                ],
               ),
             ),
-          ),
-          // Footer
-          Container(
-            height: 56.0,
-            color: Colors.blue,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Icon(Icons.home, color: Colors.white),
-                Icon(Icons.favorite, color: Colors.white),
-                Icon(Icons.person, color: Colors.white),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
