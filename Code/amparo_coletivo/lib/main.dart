@@ -1,4 +1,5 @@
 // Arquivo principal do aplicativo Amparo Coletivo
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
@@ -12,7 +13,7 @@ import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
 import 'package:amparo_coletivo/presentation/pages/change_password.dart';
 import 'package:amparo_coletivo/presentation/pages/admin_page.dart';
-import 'package:amparo_coletivo/presentation/pages/esqueci_senha_page.dart';
+import 'package:amparo_coletivo/presentation/pages/esqueci_senha_page.dart'; // ✅ nova importação
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -51,10 +52,9 @@ class App extends StatelessWidget {
         '/': (context) => const MainNavigation(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
-        //'/about': (context) => const AboutOngPage(),
         '/change_password': (context) => const ChangePasswordPage(),
         '/admin': (context) => const AdminPage(),
-        '/forgot_password': (context) => const EsqueciSenhaPage(),
+        '/forgot_password': (context) => const EsqueciSenhaPage(), // ✅ nova rota
       },
     );
   }
