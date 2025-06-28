@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:amparo_coletivo/shared/widgets/custom_drawer.dart';
 import 'package:amparo_coletivo/presentation/pages/donation.dart';
 
@@ -27,6 +28,19 @@ class OngsPage extends StatelessWidget {
         elevation: 0,
       ),
       drawer: const CustomDrawer(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DonationPage(ongData: ongData),
+            ),
+          );
+        },
+        label: const Text('Doar'),
+        icon: const Icon(Icons.volunteer_activism),
+        backgroundColor: Colors.green,
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -49,6 +63,14 @@ class OngsPage extends StatelessWidget {
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/imagem_padrao.jpg',
+                                  width: 120,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             )
                           : Image.asset(
                               imagePath,
@@ -90,17 +112,26 @@ class OngsPage extends StatelessWidget {
                 ),
                 items: imagensCarrossel.map((item) {
                   final bool isNetwork = item.startsWith("http");
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.blue[100],
-                      image: DecorationImage(
-                        image: isNetwork
-                            ? NetworkImage(item)
-                            : const AssetImage('assets/imagem_padrao.jpg')
-                                as ImageProvider,
-                        fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FullScreenImageView(imageUrl: item),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.blue[100],
+                        image: DecorationImage(
+                          image: isNetwork
+                              ? NetworkImage(item)
+                              : AssetImage(item) as ImageProvider,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   );
@@ -134,30 +165,40 @@ class OngsPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-
-              // Botão Doar
-              SizedBox(
-                width: 140,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DonationPage(ongData: ongData),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[300],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  child: const Text('Doar'),
-                ),
-              ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Página para visualizar a imagem em tela cheia com zoom.
+class FullScreenImageView extends StatelessWidget {
+  final String imageUrl;
+
+  const FullScreenImageView({super.key, required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isNetwork = imageUrl.startsWith("http");
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Visualizar imagem"),
+        backgroundColor: Colors.black,
+      ),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Hero(
+          tag: imageUrl,
+          child: PhotoView(
+            imageProvider: isNetwork
+                ? NetworkImage(imageUrl)
+                : AssetImage(imageUrl) as ImageProvider,
+            backgroundDecoration: const BoxDecoration(color: Colors.black),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2.5,
           ),
         ),
       ),

@@ -13,7 +13,8 @@ import 'package:amparo_coletivo/presentation/pages/auth/register_page.dart';
 import 'package:amparo_coletivo/presentation/pages/auth/login_page.dart';
 import 'package:amparo_coletivo/presentation/pages/change_password.dart';
 import 'package:amparo_coletivo/presentation/pages/admin_page.dart';
-import 'package:amparo_coletivo/presentation/pages/esqueci_senha_page.dart'; // ✅ nova importação
+import 'package:amparo_coletivo/presentation/pages/auth/esqueci_senha_page.dart';
+import 'package:amparo_coletivo/presentation/pages/about_ong_page.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -54,7 +55,18 @@ class App extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/change_password': (context) => const ChangePasswordPage(),
         '/admin': (context) => const AdminPage(),
-        '/forgot_password': (context) => const EsqueciSenhaPage(), // ✅ nova rota
+        '/forgot_password': (context) => const EsqueciSenhaPage(),
+        '/about': (context) => const AboutOngPage(
+              ongData: {
+                'title': 'Amparo Coletivo',
+                'description':
+                    'O Amparo Coletivo é uma plataforma dedicada a conectar ONGs e pessoas que desejam ajudar. Nosso objetivo é facilitar o acesso a informações sobre ONGs, promovendo a transparência e a solidariedade.',
+                'imageUrl':
+                    // TODO: Substituir pela URL real da imagem da ONG
+                    'https://picsum.photos/200/300',
+                'contactEmail': 'AmparoColetivo.suporte@gmail.com'
+              },
+            ),
       },
     );
   }
