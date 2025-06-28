@@ -30,3 +30,53 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Regular.ttf
+    - family: NunitoBold
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Bold.ttf
+    - family: NunitoLight
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Light.ttf
+    - family: NunitoSemiBold
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-SemiBold.ttf
+    - family: NunitoExtraBold
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-ExtraBold.ttf
+    - family: Arimo
+      fonts:
+        - asset: assets/fonts/Arimo/Arimo-Regular.ttf
+    - family: ArimoBold
+      fonts:
+        - asset: assets/fonts/Arimo/Arimo-Bold.ttf
+    - family: ArimoLight
+      fonts:
+        - asset: assets/fonts/Arimo/Arimo-Light.ttf
+    - family: ArimoSemiBold
+      fonts:
+        - asset: assets/fonts/Arimo/Arimo-SemiBold.ttf
+    - family: ArimoExtraBold
+      fonts:
+        - asset: assets/fonts/Arimo/Arimo-ExtraBold.ttf
+    - family: ArimoBlack
+      fonts:
+        - asset: assets/fonts/Arimo/Arimo-Black.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+    - family: RobotoBold
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+    - family: RobotoLight
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Light.ttf
+    - family: RobotoMedium
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+    - family: RobotoThin
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Thin.ttf
