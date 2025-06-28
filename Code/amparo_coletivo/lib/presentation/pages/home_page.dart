@@ -29,12 +29,16 @@ class _HomePageState extends State<HomePage> {
 
     final destaqueResponse = await client
         .from('ongs')
-        .select()
+        .select(
+            'id, title, description, sobre_ong, image_url, foto_relevante1, foto_relevante2, foto_relevante3, pix_copia_cola, pix_qrcode_url, category, created_at, highlighted')
         .eq('highlighted', true)
         .order('created_at');
 
-    final todasResponse =
-        await client.from('ongs').select().order('created_at');
+    final todasResponse = await client
+        .from('ongs')
+        .select(
+            'id, title, description, sobre_ong, image_url, foto_relevante1, foto_relevante2, foto_relevante3, pix_copia_cola, pix_qrcode_url, category, created_at, highlighted')
+        .order('created_at');
 
     setState(() {
       destaques = List<Map<String, dynamic>>.from(destaqueResponse);
@@ -133,11 +137,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => OngsPage(ongData: {
-                    'nome': ong['title'],
-                    'imagem': ong['image_url'],
-                    'descricao': ong['description'],
-                  }),
+                  builder: (_) => OngsPage(ongData: ong),
                 ),
               );
             },
@@ -223,11 +223,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OngsPage(ongData: {
-                'nome': ong['title'],
-                'imagem': ong['image_url'],
-                'descricao': ong['description'],
-              }),
+              builder: (_) => OngsPage(ongData: ong),
             ),
           );
         },
