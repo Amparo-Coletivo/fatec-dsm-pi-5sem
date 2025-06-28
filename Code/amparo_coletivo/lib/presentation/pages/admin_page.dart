@@ -13,7 +13,6 @@ class _AdminPageState extends State<AdminPage> {
   final _imageUrlController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _pixCodeController = TextEditingController();
-  final _pixQrUrlController = TextEditingController();
   final _sobreOngController = TextEditingController();
   final _foto1Controller = TextEditingController();
   final _foto2Controller = TextEditingController();
@@ -40,7 +39,6 @@ class _AdminPageState extends State<AdminPage> {
     final description = _descriptionController.text.trim();
     final sobreOng = _sobreOngController.text.trim();
     final pixCode = _pixCodeController.text.trim();
-    final pixQrUrl = _pixQrUrlController.text.trim();
     final foto1 = _foto1Controller.text.trim();
     final foto2 = _foto2Controller.text.trim();
     final foto3 = _foto3Controller.text.trim();
@@ -66,7 +64,6 @@ class _AdminPageState extends State<AdminPage> {
         'sobre_ong': sobreOng,
         'highlighted': _highlighted,
         'pix_copia_cola': pixCode,
-        'pix_qrcode_url': pixQrUrl,
         'category': _categorySelecionada,
         'foto_relevante1': foto1,
         'foto_relevante2': foto2,
@@ -89,7 +86,6 @@ class _AdminPageState extends State<AdminPage> {
     _descriptionController.clear();
     _sobreOngController.clear();
     _pixCodeController.clear();
-    _pixQrUrlController.clear();
     _foto1Controller.clear();
     _foto2Controller.clear();
     _foto3Controller.clear();
@@ -147,12 +143,6 @@ class _AdminPageState extends State<AdminPage> {
               decoration:
                   const InputDecoration(labelText: 'Chave Pix (copia e cola)'),
               maxLines: 3,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _pixQrUrlController,
-              decoration: const InputDecoration(
-                  labelText: 'URL da imagem do QR Code (opcional)'),
             ),
             const SizedBox(height: 12),
             TextField(

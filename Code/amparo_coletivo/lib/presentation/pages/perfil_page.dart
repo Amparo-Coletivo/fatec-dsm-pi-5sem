@@ -12,6 +12,7 @@ class PerfilPage extends StatefulWidget {
 class _PerfilPageState extends State<PerfilPage> {
   String? nomeCompleto;
   String? genero;
+  String? bio;
   bool carregando = true;
 
   @override
@@ -26,16 +27,99 @@ class _PerfilPageState extends State<PerfilPage> {
 
     final response = await Supabase.instance.client
         .from('usuarios')
-        .select('first_name, last_name, gender')
-        .eq('id',
-            user.id) // O campo 'id' deve ser o mesmo que o user.id do Supabase Auth
+        .select('first_name, last_name, gender, bio')
+        .eq('id', user.id)
         .single();
+
+    if (!mounted) return;
 
     setState(() {
       nomeCompleto = "${response['first_name']} ${response['last_name']}";
       genero = response['gender'];
+      bio = response['bio'];
       carregando = false;
     });
+  }
+
+  Future<void> _editarBio(BuildContext context) async {
+    final TextEditingController bioController =
+        TextEditingController(text: bio ?? "");
+    int charCount = bioController.text.length;
+    const int maxChars = 150;
+
+    final resultado = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Editar descrição'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: bioController,
+                    maxLength: maxChars,
+                    maxLines: 4,
+                    onChanged: (value) {
+                      setState(() {
+                        charCount = value.length;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Escreva algo sobre você...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '$charCount/$maxChars',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: charCount >= maxChars
+                            ? Colors.red
+                            : Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancelar'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, bioController.text),
+                  child: const Text('Salvar'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (resultado != null) {
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user != null) {
+        await Supabase.instance.client
+            .from('usuarios')
+            .update({'bio': resultado}).eq('id', user.id);
+
+        if (!mounted) return;
+
+        setState(() {
+          bio = resultado;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Descrição atualizada com sucesso')),
+        );
+      }
+    }
   }
 
   void _handleLogout(BuildContext context) {
@@ -92,23 +176,40 @@ class _PerfilPageState extends State<PerfilPage> {
                   style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 const SizedBox(height: 24),
+
+                // Bio/Descrição do usuário
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.all(16),
+                  width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.green),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Digite algo aqui!", style: TextStyle(fontSize: 16)),
-                      Icon(Icons.edit, size: 18),
+                      Text(
+                        bio != null && bio!.isNotEmpty
+                            ? bio!
+                            : "Digite algo sobre você!",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.edit, size: 18),
+                          onPressed: () => _editarBio(context),
+                        ),
+                      ),
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 24),
+
+                // Total de doações (futuro)
                 Column(
                   children: [
                     const Text("Total de doações"),

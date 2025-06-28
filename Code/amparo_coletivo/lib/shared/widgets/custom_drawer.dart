@@ -17,7 +17,8 @@ class CustomDrawer extends StatelessWidget {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: email,
-      query: 'subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}',
+      query:
+          'subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}',
     );
 
     // Fecha o Drawer antes de tentar abrir o e-mail
@@ -126,11 +127,23 @@ class CustomDrawer extends StatelessWidget {
             ],
 
             ListTile(
+              leading: const Icon(Icons.info, color: Colors.white),
+              title: const Text('Sobre a ONG',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/about');
+              },
+            ),
+            const Divider(color: Colors.white24, height: 1),
+
+            ListTile(
               leading: const Icon(Icons.support_agent, color: Colors.white),
               title:
                   const Text('Suporte', style: TextStyle(color: Colors.white)),
               onTap: () => _launchEmail(context),
             ),
+            const Divider(color: Colors.white24, height: 1),
 
             // Mostra o botão "Administração" apenas para o admin
             if (user != null && user.email == adminEmail) ...[

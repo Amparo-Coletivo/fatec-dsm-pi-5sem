@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:amparo_coletivo/services/logger_service.dart';
 import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
+import 'package:amparo_coletivo/presentation/pages/auth/esqueci_senha_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -116,6 +117,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextButton(
                           onPressed: () {
                             // Recuperação de senha futura
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const EsqueciSenhaPage(),
+                              ),
+                            );
                           },
                           child: const Text(
                             'Esqueceu a senha?',

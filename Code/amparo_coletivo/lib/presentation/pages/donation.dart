@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class DonationPage extends StatefulWidget {
   final Map<String, dynamic> ongData;
@@ -69,7 +70,6 @@ class _DonationPageState extends State<DonationPage> {
 
     final String ongName = widget.ongData['title'] ?? 'ONG';
     final String? pixCode = widget.ongData['pix_copia_cola'];
-    final String? qrCodeUrl = widget.ongData['pix_qrcode_url'];
 
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +79,7 @@ class _DonationPageState extends State<DonationPage> {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: pixCode == null || pixCode.trim().isEmpty
-            ? Center(
+            ? const Center(
                 child: Text(
                   'Esta ONG ainda não cadastrou uma chave Pix.',
                   style: TextStyle(color: Colors.red, fontSize: 16),
@@ -95,26 +95,17 @@ class _DonationPageState extends State<DonationPage> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 24),
-
-                    // QR Code
-                    qrCodeUrl != null && qrCodeUrl.trim().isNotEmpty
-                        ? Image.network(
-                            qrCodeUrl,
-                            width: 250,
-                            height: 250,
-                            fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => const Icon(
-                              Icons.qr_code_2,
-                              size: 80,
-                              color: Colors.grey,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.qr_code_2,
-                            size: 120,
-                            color: Colors.grey,
-                          ),
-
+                    const Text(
+                      'Doação via Pix (QR Code):',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    QrImageView(
+                      data: pixCode,
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    ),
                     const SizedBox(height: 24),
                     const Text(
                       'Código Pix (Copia e Cola):',
@@ -122,7 +113,6 @@ class _DonationPageState extends State<DonationPage> {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -134,9 +124,7 @@ class _DonationPageState extends State<DonationPage> {
                         style: const TextStyle(fontSize: 14),
                       ),
                     ),
-
                     const SizedBox(height: 8),
-
                     ElevatedButton.icon(
                       onPressed: () => _copyPixCode(pixCode),
                       icon: const Icon(Icons.copy),
@@ -150,9 +138,7 @@ class _DonationPageState extends State<DonationPage> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 32),
-
                     ElevatedButton.icon(
                       onPressed: _isLoading ? null : _registerDonation,
                       icon: const Icon(Icons.check_circle),
