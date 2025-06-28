@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 import 'package:amparo_coletivo/presentation/pages/main_navigation.dart';
-import 'config/theme_config.dart';
-import 'config/theme_notifier.dart';
+import 'package:amparo_coletivo/config/theme_config.dart';
+import 'package:amparo_coletivo/config/theme_notifier.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
