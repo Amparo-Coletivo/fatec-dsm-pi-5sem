@@ -10,14 +10,14 @@ class OngsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String title = ongData['nome'] ?? 'ONG sem nome';
-    final String description = ongData['descricao'] ?? 'Sem descrição';
-    final String imagePath = ongData['imagem'] ?? 'assets/imagem_padrao.jpg';
+    final String title = ongData['title'] ?? 'ONG sem nome';
+    final String description = ongData['sobre_ong'] ?? 'Sem descrição';
+    final String imagePath = ongData['image_url'] ?? 'assets/imagem_padrao.jpg';
 
     final List<String> imagensCarrossel = [
-      ongData['foto1'] ?? 'assets/imagem1.jpg',
-      ongData['foto2'] ?? 'assets/imagem2.jpg',
-      ongData['foto3'] ?? 'assets/imagem3.jpg',
+      ongData['foto_relevante1'] ?? 'assets/imagem1.jpg',
+      ongData['foto_relevante2'] ?? 'assets/imagem2.jpg',
+      ongData['foto_relevante3'] ?? 'assets/imagem3.jpg',
     ];
 
     return Scaffold(

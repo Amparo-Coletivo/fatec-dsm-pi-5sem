@@ -14,6 +14,10 @@ class _AdminPageState extends State<AdminPage> {
   final _descriptionController = TextEditingController();
   final _pixCodeController = TextEditingController();
   final _pixQrUrlController = TextEditingController();
+  final _sobreOngController = TextEditingController();
+  final _foto1Controller = TextEditingController();
+  final _foto2Controller = TextEditingController();
+  final _foto3Controller = TextEditingController();
 
   String? _categorySelecionada;
   bool _highlighted = false;
@@ -34,8 +38,12 @@ class _AdminPageState extends State<AdminPage> {
     final title = _titleController.text.trim();
     final imageUrl = _imageUrlController.text.trim();
     final description = _descriptionController.text.trim();
+    final sobreOng = _sobreOngController.text.trim();
     final pixCode = _pixCodeController.text.trim();
     final pixQrUrl = _pixQrUrlController.text.trim();
+    final foto1 = _foto1Controller.text.trim();
+    final foto2 = _foto2Controller.text.trim();
+    final foto3 = _foto3Controller.text.trim();
 
     if (title.isEmpty ||
         imageUrl.isEmpty ||
@@ -55,10 +63,14 @@ class _AdminPageState extends State<AdminPage> {
         'title': title,
         'image_url': imageUrl,
         'description': description,
+        'sobre_ong': sobreOng,
         'highlighted': _highlighted,
         'pix_copia_cola': pixCode,
         'pix_qrcode_url': pixQrUrl,
         'category': _categorySelecionada,
+        'foto_relevante1': foto1,
+        'foto_relevante2': foto2,
+        'foto_relevante3': foto3,
         'created_at': DateTime.now().toIso8601String(),
       });
 
@@ -75,8 +87,12 @@ class _AdminPageState extends State<AdminPage> {
     _titleController.clear();
     _imageUrlController.clear();
     _descriptionController.clear();
+    _sobreOngController.clear();
     _pixCodeController.clear();
     _pixQrUrlController.clear();
+    _foto1Controller.clear();
+    _foto2Controller.clear();
+    _foto3Controller.clear();
     setState(() {
       _highlighted = false;
       _categorySelecionada = null;
@@ -115,8 +131,15 @@ class _AdminPageState extends State<AdminPage> {
             const SizedBox(height: 12),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Descrição'),
+              decoration: const InputDecoration(labelText: 'Descrição curta'),
               maxLines: 3,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _sobreOngController,
+              decoration: const InputDecoration(
+                  labelText: 'Descrição detalhada (Sobre a ONG)'),
+              maxLines: 4,
             ),
             const SizedBox(height: 12),
             TextField(
@@ -130,6 +153,24 @@ class _AdminPageState extends State<AdminPage> {
               controller: _pixQrUrlController,
               decoration: const InputDecoration(
                   labelText: 'URL da imagem do QR Code (opcional)'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _foto1Controller,
+              decoration:
+                  const InputDecoration(labelText: 'URL da Foto Relevante 1'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _foto2Controller,
+              decoration:
+                  const InputDecoration(labelText: 'URL da Foto Relevante 2'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _foto3Controller,
+              decoration:
+                  const InputDecoration(labelText: 'URL da Foto Relevante 3'),
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
